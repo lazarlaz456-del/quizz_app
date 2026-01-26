@@ -17,6 +17,9 @@ class App(tk.Tk):
         self.quit_button = tk.Button(self, text="Quit", font=("Times New Roman", 18, "italic"), bg="black", fg="white",
                                     relief="flat", activebackground="#333333", activeforeground="white")
         self.quit_button.grid(row=0, column=3, padx=10, pady=10)
+
+        self.text_area = tk.Text(self, height=10, wrap="word")
+        self.text_area.grid(row=1, column=1, padx=10, pady=10, columnspan=3, rowspan=3, sticky="nsew")
         
 
 
