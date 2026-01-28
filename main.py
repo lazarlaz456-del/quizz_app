@@ -1,5 +1,8 @@
 #Definition of App class
 import tkinter as tk
+import os
+
+base_dir_path = os.path.dirname(os.path.abspath(__file__))
 
 class App(tk.Tk):
     def __init__(self):
@@ -20,7 +23,16 @@ class App(tk.Tk):
 
         self.text_area = tk.Text(self, height=10, wrap="word")
         self.text_area.grid(row=1, column=1, padx=10, pady=10, columnspan=3, rowspan=3, sticky="nsew")
-        
+
+        img_path_true = os.path.join(base_dir_path, "true.png")
+        self.true_img = tk.PhotoImage(file=img_path_true)
+        self.true_button = tk.Button(self, image=self.true_img)
+        self.true_button.grid(row=4, column=1, padx=10, pady=10)
+
+        img_path_false = os.path.join(base_dir_path, "false.png")
+        self.false_img = tk.PhotoImage(file=img_path_false)
+        self.false_button = tk.Button(self, image=self.false_img)
+        self.false_button.grid(row=4, column=3, padx=10, pady=10)
 
 
 app = App()
