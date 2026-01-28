@@ -1,6 +1,8 @@
 #Definition of App class
 import tkinter as tk
 import os
+import requests as rq
+import html
 
 base_dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,7 +16,7 @@ class App(tk.Tk):
         self.canvas.grid(row=0, column=0, rowspan=5, columnspan=5, sticky="nsew")
 
         self.start_button = tk.Button(self, text="Start", font=("Times New Roman", 18, "italic"), bg="#45A049", fg="white",
-                                    relief="flat", activebackground="#43A047", activeforeground="black")
+                                    relief="flat", activebackground="#43A047", activeforeground="black", command=self.get_question)
         self.start_button.grid(row=0, column=1, padx=10, pady=10)
 
         self.quit_button = tk.Button(self, text="Quit", font=("Times New Roman", 18, "italic"), bg="black", fg="white",
@@ -33,6 +35,19 @@ class App(tk.Tk):
         self.false_img = tk.PhotoImage(file=img_path_false)
         self.false_button = tk.Button(self, image=self.false_img)
         self.false_button.grid(row=4, column=3, padx=10, pady=10)
+
+    def get_question(self):
+        url = "https://opentdb.com/api.php?amount=20&type=boolean"
+        response = rq.get(url)
+        data = response.json()
+
+        question = data["results"][0]["question"]
+        question = html.unescape(question)
+
+        self.text_area.delete("1.0", "end")
+        self.text_area.insert("end", question)
+
+
 
 
 app = App()
