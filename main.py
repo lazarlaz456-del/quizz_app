@@ -41,11 +41,21 @@ class App(tk.Tk):
         response = rq.get(url)
         data = response.json()
 
-        question = data["results"][0]["question"]
-        question = html.unescape(question)
+        questions_raw = data["results"]
+        questions_clean = dict()
+
+        counter_key = 1
+        for question in questions_raw:
+            question_string = html.unescape(question["question"])
+            question_answer = question["correct_answer"]
+            question_category = question["category"]
+            questions_clean[counter_key] = {"question": question_string, "category": question_category, "answer": question_answer}
+            counter_key += 1
+        
+        self.question_bank = questions_clean
 
         self.text_area.delete("1.0", "end")
-        self.text_area.insert("end", question)
+        self.text_area.insert("end", self.question_bank[1]["question"])
 
 
 
