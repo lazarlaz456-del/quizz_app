@@ -37,7 +37,10 @@ class App(tk.Tk):
         self.false_button = tk.Button(self, image=self.false_img)
         self.false_button.grid(row=4, column=3, padx=10, pady=10)
 
-        
+        self.score = 0
+        self.score_label = tk.Label(self, text=f"SCORE\n{self.score}/10", anchor="center", font=("Times New Roman", 20, "bold"), bg="#D3D3D3")
+        self.score_label.grid(row=4, column=2, padx=10, pady=10)
+
     def get_question_bank(self):
         url = "https://opentdb.com/api.php?amount=20&type=boolean"
         response = rq.get(url)
