@@ -1,6 +1,9 @@
 #Definition of App class
 import tkinter as tk
 import os
+import requests as rq
+import html
+import time
 
 base_dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,7 +17,7 @@ class App(tk.Tk):
         self.canvas.grid(row=0, column=0, rowspan=5, columnspan=5, sticky="nsew")
 
         self.start_button = tk.Button(self, text="Start", font=("Times New Roman", 18, "italic"), bg="#45A049", fg="white",
-                                    relief="flat", activebackground="#43A047", activeforeground="black")
+                                    relief="flat", activebackground="#43A047", activeforeground="black", command=self.get_question_bank)
         self.start_button.grid(row=0, column=1, padx=10, pady=10)
 
         self.quit_button = tk.Button(self, text="Quit", font=("Times New Roman", 18, "italic"), bg="black", fg="white",
@@ -33,6 +36,49 @@ class App(tk.Tk):
         self.false_img = tk.PhotoImage(file=img_path_false)
         self.false_button = tk.Button(self, image=self.false_img)
         self.false_button.grid(row=4, column=3, padx=10, pady=10)
+
+        self.score = 0
+        self.score_label = tk.Label(self, text=f"SCORE\n{self.score}/10", anchor="center", font=("Times New Roman", 20, "bold"), bg="#D3D3D3")
+        self.score_label.grid(row=4, column=2, padx=10, pady=10)
+
+    def get_question_bank(self):
+        url = "https://opentdb.com/api.php?amount=20&type=boolean"
+        response = rq.get(url)
+        data = response.json()
+
+        questions_raw = data["results"]
+        questions_clean = dict()
+
+        counter_key = 1
+        for question in questions_raw:
+            question_string = html.unescape(question["question"])
+            question_answer = question["correct_answer"]
+            question_category = question["category"]
+            questions_clean[counter_key] = {"question": question_string, "category": question_category, "answer": question_answer}
+            counter_key += 1
+        
+        self.question_bank = questions_clean
+        self.current_question = self.question_bank[1]
+
+        self.text_area.delete("1.0", "end")
+        self.text_area.insert("end", self.current_question["question"])
+
+    def true_button_choice(self):
+        self.choice = "True"
+
+    def false_button_choice(self):
+        self.choice = "False"
+
+    def get_result_next_question(self):
+        if self.choice == self.question_bank["answer"]:
+            pass
+
+
+
+
+
+
+
 
 
 app = App()
